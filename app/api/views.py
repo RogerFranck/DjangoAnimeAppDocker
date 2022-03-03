@@ -1,6 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-
+from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import filters
@@ -8,6 +7,7 @@ from .serializers import AnimeSerializers, AnimeCategorySerializers, SountrackAn
 from .models import *
 
 # Create your views here.
+
 
 def index(request):
     return HttpResponse("Hello world! A ver")
@@ -19,17 +19,29 @@ class AnimeViewSet(viewsets.ModelViewSet):
     queryset = Anime.objects.all()
     serializer_class = AnimeSerializers
 
+
 class AnimeCategoriesViewSet(viewsets.ModelViewSet):
     queryset = AnimeCategory.objects.all()
     serializer_class = AnimeCategorySerializers
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        data = {
+            "message": "Object delted"
+        }
+        return JsonResponse(data)
+
 
 class SountrackAnimeViewSet(viewsets.ModelViewSet):
     queryset = Sountrack.objects.all()
     serializer_class = SountrackAnimeSerializer
 
+
 class StudioAnimeViewSet(viewsets.ModelViewSet):
     queryset = Studio.objects.all()
     serializer_class = StudioAnimeSerializer
+
 
 class CharactersViewSet(viewsets.ModelViewSet):
     queryset = Characters.objects.all()
