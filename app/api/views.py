@@ -11,8 +11,7 @@ from .models import *
 
 def index(request):
     return HttpResponse("Hello world! A ver")
-
-
+    
 class AnimeViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'description']
     filter_backends = (filters.SearchFilter,)
